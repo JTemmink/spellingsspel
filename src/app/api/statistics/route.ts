@@ -58,20 +58,24 @@ export async function GET(request: NextRequest) {
       const {
         readSpellingAttempts,
         readPracticeSessions,
-        readPoints
+        readPoints,
+        readWords
       } = await import('@/lib/database');
 
       // Get data from JSON files
-      const [attempts, sessions, points] = await Promise.all([
+      const [attempts, sessions, points, words] = await Promise.all([
         readSpellingAttempts(),
         readPracticeSessions(),
-        readPoints()
+        readPoints(),
+        readWords()
       ]);
 
-      // Filter data for specific user
-      const userAttempts = attempts;
+      // Filter data for specific user (for sessions and points)
       const userSessions = sessions.filter(s => s.user_id === userId);
       const userPoints = points.filter(p => p.user_id === userId);
+      
+      // All attempts are considered for the user (since we don't have user_id in attempts)
+      const userAttempts = attempts;
 
       // Calculate statistics
       const totalPoints = userPoints.reduce((sum, p) => sum + p.amount, 0);
@@ -112,12 +116,20 @@ export async function GET(request: NextRequest) {
           };
         });
 
+      // Create a map of word_id to word for lookup
+      const wordMap = new Map();
+      words.forEach(word => {
+        wordMap.set(word.id, word.word);
+      });
+
       // Find difficult words (words with low accuracy)
       const wordStats = new Map();
       userAttempts.forEach(attempt => {
         const wordId = attempt.word_id;
+        const wordText = wordMap.get(wordId) || 'onbekend woord';
+        
         if (!wordStats.has(wordId)) {
-          wordStats.set(wordId, { attempts: 0, correct: 0, word: 'unknown' });
+          wordStats.set(wordId, { attempts: 0, correct: 0, word: wordText });
         }
         const stats = wordStats.get(wordId);
         stats.attempts++;
