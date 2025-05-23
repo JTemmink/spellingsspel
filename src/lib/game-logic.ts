@@ -1,15 +1,4 @@
-import { 
-  Word, 
-  SpecialPracticeItem, 
-  Settings,
-  readSpecialPracticeList,
-  writeSpecialPracticeList,
-  readSettings,
-  readWordLists,
-  readWords,
-  writeWords,
-  generateId
-} from './database';
+import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readSettings,  readWords,  generateId} from './database';
 
 // Check if a spelling attempt is correct
 export function checkSpelling(inputWord: string, correctWord: string): boolean {
@@ -83,7 +72,7 @@ export async function getPracticeWords(
   const words = await readWords();
   const selectedWords = words.filter(word => word.list_id === listId);
 
-  let practiceWords: Word[] = [...selectedWords];
+  const practiceWords: Word[] = [...selectedWords];
 
   // Add special practice words if requested
   if (includeSpecialWords && userId) {
