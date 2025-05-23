@@ -280,7 +280,7 @@ export default function PlayPage() {
       setIsProcessing(false);
       setUserInput('');
     }
-  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId]);
+  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord]);
 
   const repeatWord = () => {
     if (currentWord) {

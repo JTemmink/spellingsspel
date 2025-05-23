@@ -1,29 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
+
+// Fallback data for when database is not available
+const fallbackWordLists = [
+  {
+    id: 'list_1_fallback',
+    name: 'Demo Lijst 1',
+    description: 'Basis woordenschat',
+    difficulty: 'Gemakkelijk',
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'list_2_fallback', 
+    name: 'Demo Lijst 2',
+    description: 'Gevorderde woorden',
+    difficulty: 'Gemiddeld',
+    created_at: new Date().toISOString()
+  }
+];
 
 // GET /api/word-lists - Haal alle woordlijsten op voor een user
-export async function GET(request: NextRequest) {
+export async function GET() {
+  // If Supabase is not configured, return fallback data
+  if (!isSupabaseConfigured) {
+    console.log('Supabase not configured, returning fallback word lists');
+    return NextResponse.json({ wordLists: fallbackWordLists });
+  }
+
   try {
-    // For now, get all word lists regardless of user_id (since migration is in progress)
     const { data: wordLists, error } = await supabase
       .from('word_lists')
       .select('*')
       .order('created_at', { ascending: true });
 
     if (error) {
-      console.error('Supabase error:', error);
-      return NextResponse.json({ error: 'Failed to fetch word lists', details: error.message }, { status: 500 });
+      console.error('Supabase error, falling back to demo data:', error);
+      return NextResponse.json({ wordLists: fallbackWordLists });
     }
 
-    return NextResponse.json({ wordLists });
-  } catch (error: any) {
-    console.error('Error fetching word lists:', error);
-    return NextResponse.json({ error: 'Failed to fetch word lists', details: error.message }, { status: 500 });
+    return NextResponse.json({ wordLists: wordLists || fallbackWordLists });
+  } catch (error) {
+    console.error('Database connection failed, using fallback data:', error);
+    return NextResponse.json({ wordLists: fallbackWordLists });
   }
 }
 
 // POST /api/word-lists - Create a new word list
 export async function POST(request: NextRequest) {
+  // Early return if Supabase is not configured
+  if (!isSupabaseConfigured) {
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 });
+  }
+
   try {
     const body = await request.json();
     const { user_id, name, description, difficulty } = body;
@@ -57,6 +85,11 @@ export async function POST(request: NextRequest) {
 
 // PUT /api/word-lists - Update a word list
 export async function PUT(request: NextRequest) {
+  // Early return if Supabase is not configured
+  if (!isSupabaseConfigured) {
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 });
+  }
+
   try {
     const body = await request.json();
     const { id, name, description, difficulty } = body;
@@ -94,6 +127,11 @@ export async function PUT(request: NextRequest) {
 
 // DELETE /api/word-lists - Delete a word list and its words
 export async function DELETE(request: NextRequest) {
+  // Early return if Supabase is not configured
+  if (!isSupabaseConfigured) {
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 });
+  }
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const id = searchParams.get('id');
