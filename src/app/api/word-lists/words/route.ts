@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
+// Type definition for word objects
+interface Word {
+  id: string;
+  word: string;
+  explanation: string;
+}
+
 // Fallback data for when database is not available
-const fallbackWords: { [key: string]: any[] } = {
+const fallbackWords: { [key: string]: Word[] } = {
   'list_1_fallback': [
     { id: 'word_1', word: 'huis', explanation: 'Een plek om te wonen' },
     { id: 'word_2', word: 'boom', explanation: 'Een grote plant met takken' },
