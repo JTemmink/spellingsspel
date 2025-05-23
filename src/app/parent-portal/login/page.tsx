@@ -22,14 +22,13 @@ export default function LoginPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          password: password.trim(),
-          action: 'verify'
+          password: password.trim()
         })
       });
 
       const data = await response.json();
 
-      if (data.valid) {
+      if (data.success) {
         // Store auth in localStorage
         localStorage.setItem('parentAuth', 'true');
         router.push('/parent-portal/dashboard');
