@@ -1,0 +1,121 @@
+[
+  {
+    "id": "attempt_1747992689432_dxl01yt79",
+    "session_id": "current_session",
+    "word_id": "word_2",
+    "input": "school",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747992699264_v7u0mzb3f",
+    "session_id": "current_session",
+    "word_id": "word_3",
+    "input": "vriende",
+    "correct": false
+  },
+  {
+    "id": "attempt_1747993508780_n4ird1y55",
+    "session_id": "current_session",
+    "word_id": "word_3",
+    "input": "vrienden",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747993514474_9g1aedr4a",
+    "session_id": "current_session",
+    "word_id": "word_4",
+    "input": "spelen",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747994438834_wn71uxl87",
+    "session_id": "current_session",
+    "word_id": "word_1_12",
+    "input": "mixen",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747994444755_10kaxccmr",
+    "session_id": "current_session",
+    "word_id": "word_1_7",
+    "input": "effect",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747994834056_s7vc2md9m",
+    "session_id": "current_session",
+    "word_id": "word_1_11",
+    "input": "luxemburg",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747994839631_ir9bwc9az",
+    "session_id": "current_session",
+    "word_id": "word_1_2",
+    "input": "pres",
+    "correct": false
+  },
+  {
+    "id": "attempt_1747995485055_c6zwkh10z",
+    "session_id": "current_session",
+    "word_id": "word_1_12",
+    "input": "mixe",
+    "correct": false
+  },
+  {
+    "id": "attempt_1747995539473_1zpogf7vu",
+    "session_id": "current_session",
+    "word_id": "word_1_6",
+    "input": "compact",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747995588331_9zkc2435v",
+    "session_id": "current_session",
+    "word_id": "word_1_1",
+    "input": "hghg",
+    "correct": false
+  },
+  {
+    "id": "attempt_1747996322464_vhmjtxr9y",
+    "session_id": "current_session",
+    "word_id": "word_1_7",
+    "input": "effect",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747996326500_j5hph0sns",
+    "session_id": "current_session",
+    "word_id": "word_1_12",
+    "input": "eee",
+    "correct": false
+  },
+  {
+    "id": "attempt_1747999151651_b3pr6xye1",
+    "session_id": "session_1747999146350_3sizms7o6",
+    "word_id": "word_1_3",
+    "input": "directie",
+    "correct": true
+  },
+  {
+    "id": "attempt_1747999158158_17v6jgwq4",
+    "session_id": "session_1747999146350_3sizms7o6",
+    "word_id": "word_1_13",
+    "input": "comple",
+    "correct": false
+  },
+  {
+    "id": "attempt_1748004328593_3qbtie1mj",
+    "session_id": "session_1748004322262_nzvnqlcbz",
+    "word_id": "word_1_6",
+    "input": "compactr",
+    "correct": false
+  },
+  {
+    "id": "attempt_1748004349761_gpaydf9e2",
+    "session_id": "session_1748004322262_nzvnqlcbz",
+    "word_id": "word_1_9",
+    "input": "discussie",
+    "correct": true
+  }
+]

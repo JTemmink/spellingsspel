@@ -1,0 +1,90 @@
+[
+  {
+    "id": "points_1",
+    "user_id": "user_1",
+    "total_points": 80,
+    "activity_type": "initial",
+    "amount": 0,
+    "timestamp": "2025-05-23T10:00:00.000Z"
+  },
+  {
+    "id": "points_1747992689437_3l748xoz9",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T09:31:29.437Z"
+  },
+  {
+    "id": "points_1747993508787_ng8wpeba6",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T09:45:08.787Z"
+  },
+  {
+    "id": "points_1747993514480_z0068em6p",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T09:45:14.480Z"
+  },
+  {
+    "id": "points_1747994438840_r05usqz8p",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T10:00:38.840Z"
+  },
+  {
+    "id": "points_1747994444760_rtx7c2j2f",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T10:00:44.760Z"
+  },
+  {
+    "id": "points_1747994834065_a8we5ncg9",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T10:07:14.065Z"
+  },
+  {
+    "id": "points_1747995539482_2df8ifn4c",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T10:18:59.482Z"
+  },
+  {
+    "id": "points_1747996322472_143vidtch",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T10:32:02.472Z"
+  },
+  {
+    "id": "points_1747999151657_c98om3gft",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T11:19:11.657Z"
+  },
+  {
+    "id": "points_1748004349767_lav2he5vw",
+    "user_id": "user_1",
+    "total_points": 0,
+    "activity_type": "correct_word",
+    "amount": 10,
+    "timestamp": "2025-05-23T12:45:49.767Z"
+  }
+]

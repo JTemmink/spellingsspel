@@ -1,0 +1,36 @@
+[
+  {
+    "id": "list_1",
+    "user_id": "user_1",
+    "name": "Lijst 1",
+    "description": "Woorden met -tie en complexe spellingen",
+    "difficulty": "Gemiddeld"
+  },
+  {
+    "id": "list_2",
+    "user_id": "user_1",
+    "name": "Lijst 2",
+    "description": "Woorden met 's en samenstellingen",
+    "difficulty": "Moeilijk"
+  },
+  {
+    "id": "list_3",
+    "user_id": "user_1",
+    "name": "Lijst 3",
+    "description": "Observeren, poëzie en lastige woorden",
+    "difficulty": "Moeilijk"
+  },
+  {
+    "id": "list_4",
+    "user_id": "user_1",
+    "name": "Lijst 4",
+    "description": "Woorden met -isch en verkleinwoorden",
+    "difficulty": "Gemiddeld"
+  },
+  {
+    "id": "list_1748004319437_luz6ro5ko",
+    "user_id": "user_1",
+    "name": "Moeilijke Woorden",
+    "description": "Automatisch gevulde lijst met foutgespelde woorden"
+  }
+]

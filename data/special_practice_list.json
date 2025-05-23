@@ -1,0 +1,50 @@
+[
+  {
+    "id": "special_1747992699270_cpv58w5t4",
+    "word_id": "word_3",
+    "user_id": "user_1",
+    "mistake_count": 1,
+    "correct_streak": 1,
+    "last_practiced": "2025-05-23T09:45:08.792Z"
+  },
+  {
+    "id": "special_1747994839637_pj47m9p65",
+    "word_id": "word_1_2",
+    "user_id": "user_1",
+    "mistake_count": 1,
+    "correct_streak": 0,
+    "last_practiced": "2025-05-23T10:07:19.637Z"
+  },
+  {
+    "id": "special_1747995485064_cx8706zol",
+    "word_id": "word_1_12",
+    "user_id": "user_1",
+    "mistake_count": 2,
+    "correct_streak": 0,
+    "last_practiced": "2025-05-23T10:32:06.508Z"
+  },
+  {
+    "id": "special_1747995588341_5mvqf821i",
+    "word_id": "word_1_1",
+    "user_id": "user_1",
+    "mistake_count": 1,
+    "correct_streak": 0,
+    "last_practiced": "2025-05-23T10:19:48.341Z"
+  },
+  {
+    "id": "special_1747999158165_3haj86n4d",
+    "word_id": "word_1_13",
+    "user_id": "user_1",
+    "mistake_count": 1,
+    "correct_streak": 0,
+    "last_practiced": "2025-05-23T11:19:18.165Z"
+  },
+  {
+    "id": "special_1748004328610_ecns33ilc",
+    "word_id": "word_1_6",
+    "user_id": "user_1",
+    "mistake_count": 1,
+    "correct_streak": 0,
+    "last_practiced": "2025-05-23T12:45:28.610Z"
+  }
+]

@@ -1,0 +1,41 @@
+---
+description: Regels voor het spellingsspelproject
+alwaysApply: true
+---
+Je werkt aan een spellingsspel voor kinderen van 11 jaar. Het project gebruikt TypeScript, Next.js, React, Tailwind CSS en een lokale database met JSON-bestanden.
+
+**Codeerstijl:**
+- Schrijf schone, leesbare TypeScript-code.
+- Gebruik functionele componenten met React hooks.
+- Volg Next.js best practices, gebruik de App Router voor navigatie.
+- Gebruik Tailwind CSS voor alle styling, met een mobile-first benadering.
+- Gebruik optioneel DaisyUI voor kindvriendelijke UI-componenten.
+
+**Lokale Database:**
+- Gebruik JSON-bestanden in de `data/` map voor permanente opslag (gebruikers, woordlijsten, etc.).
+- Gebruik Node.js `fs` in Next.js API-routes om JSON-bestanden te lezen/schrijven.
+- Gebruik `localStorage` voor tijdelijke speldata (bijv. huidige sessie).
+- Verwijs naar @database-schema.md voor de JSON-structuur.
+- Zorg ervoor dat bestandsbewerkingen veilig zijn en fouten correct worden afgehandeld.
+
+**Spellogica:**
+- Beheer de spelstatus met React hooks (useState, useContext) of Zustand indien nodig.
+- Verwerk gebruikersinvoer voor het spellen van woorden en geef directe feedback.
+- Sla voortgang op in JSON-bestanden zoals beschreven in @features.md.
+
+**Optionele functies:**
+- Als Shadcn UI wordt gebruikt, integreer de componenten voor UI-elementen.
+- Als de OpenAI API wordt gebruikt, genereer kindvriendelijke uitleg voor spellingsfouten met geschikte prompts.
+- Gebruik de Web Speech API voor het uitspreken van woorden.
+
+**Referentiedocumenten:**
+@game-requirements.md
+@database-schema.md
+@pages-and-components.md
+@api-routes.md
+@features.md
+
+**Extra instructies:**
+- Zorg ervoor dat de code compatibel is met de nieuwste versies van de gebruikte bibliotheken.
+- Voeg opmerkingen toe aan de code om complexe logica, vooral voor spelmechanismen, te verklaren.
+- Geef prioriteit aan toegankelijkheid en gebruiksvriendelijkheid voor kinderen.

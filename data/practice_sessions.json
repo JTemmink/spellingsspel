@@ -1,0 +1,15 @@
+[
+  {
+    "id": "session_1747999146350_3sizms7o6",
+    "user_id": "user_1",
+    "start_time": "2025-05-23T11:19:06.350Z",
+    "duration": 15,
+    "end_time": "2025-05-23T11:19:20.924Z"
+  },
+  {
+    "id": "session_1748004322262_nzvnqlcbz",
+    "user_id": "user_1",
+    "start_time": "2025-05-23T12:45:22.262Z",
+    "duration": 0
+  }
+]
