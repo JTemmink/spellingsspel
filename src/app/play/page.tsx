@@ -76,7 +76,7 @@ export default function PlayPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.wordLists && data.wordLists.length > 0) {
-          setAvailableLists(data.wordLists.map(list => ({
+          setAvailableLists(data.wordLists.map((list: any) => ({
             id: list.id,
             name: list.name,
             description: list.description || ''
@@ -235,7 +235,7 @@ export default function PlayPage() {
       setIsProcessing(false);
       setUserInput('');
     }
-  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord]);
+  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId]);
 
   const endPracticeSession = async () => {
     if (!sessionId) return;
@@ -251,7 +251,7 @@ export default function PlayPage() {
     }
   };
 
-  const nextWord = (session: GameSession) => {
+  const nextWord = useCallback((session: GameSession) => {
     const nextIndex = session.currentWordIndex + 1;
     
     if (nextIndex >= session.words.length) {
@@ -262,19 +262,19 @@ export default function PlayPage() {
       return;
     }
 
-    const nextWord = session.words[nextIndex];
+    const nextWordItem = session.words[nextIndex];
     const updatedSession = { ...session, currentWordIndex: nextIndex };
     
     setGameSession(updatedSession);
-    setCurrentWord(nextWord);
+    setCurrentWord(nextWordItem);
     setFeedback({ type: null, message: '' });
     setShowExplanation(false);
     
     // Speak the next word
     setTimeout(() => {
-      speakWord(nextWord.word);
+      speakWord(nextWordItem.word);
     }, 500);
-  };
+  }, []);
 
   const repeatWord = () => {
     if (currentWord) {
