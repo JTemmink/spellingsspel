@@ -32,6 +32,12 @@ interface GameSession {
   sessionPoints: number;
 }
 
+interface WordListData {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 export default function PlayPage() {
   const [mounted, setMounted] = useState(false);
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
@@ -76,7 +82,7 @@ export default function PlayPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.wordLists && data.wordLists.length > 0) {
-          setAvailableLists(data.wordLists.map((list: any) => ({
+          setAvailableLists(data.wordLists.map((list: WordListData) => ({
             id: list.id,
             name: list.name,
             description: list.description || ''
@@ -235,9 +241,9 @@ export default function PlayPage() {
       setIsProcessing(false);
       setUserInput('');
     }
-  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId]);
+  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord]);
 
-  const endPracticeSession = async () => {
+  const endPracticeSession = useCallback(async () => {
     if (!sessionId) return;
     
     try {
@@ -249,7 +255,7 @@ export default function PlayPage() {
     } catch (error) {
       console.error('Error ending practice session:', error);
     }
-  };
+  }, [sessionId]);
 
   const nextWord = useCallback((session: GameSession) => {
     const nextIndex = session.currentWordIndex + 1;
@@ -274,7 +280,7 @@ export default function PlayPage() {
     setTimeout(() => {
       speakWord(nextWordItem.word);
     }, 500);
-  }, []);
+  }, [endPracticeSession]);
 
   const repeatWord = () => {
     if (currentWord) {
