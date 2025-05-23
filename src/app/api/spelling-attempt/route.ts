@@ -7,6 +7,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { userId, wordId, word, userInput, settings, sessionId } = body;
 
+    console.log('Spelling attempt received:', { userId, wordId, word, userInput, sessionId, isVercel });
+
     if (!userId || !wordId || !word || !userInput || !settings || !sessionId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -16,6 +18,8 @@ export async function POST(request: NextRequest) {
     
     // Calculate points
     const points = isCorrect ? (settings.correct_word_points || 10) : 0;
+
+    console.log('Spelling result:', { isCorrect, points, isVercel });
 
     // If running on Vercel, we can't write to files, so just return the result
     if (isVercel) {
@@ -37,6 +41,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Local development with file system access
+    console.log('Processing locally - attempting to save to files...');
+    
     try {
       const { 
         readSpellingAttempts,
@@ -59,10 +65,16 @@ export async function POST(request: NextRequest) {
         correct: isCorrect
       };
 
+      console.log('Created spelling attempt:', spellingAttempt);
+
       // Save spelling attempt
       const attempts = await readSpellingAttempts();
+      console.log('Current attempts count:', attempts.length);
+      
       attempts.push(spellingAttempt);
       await writeSpellingAttempts(attempts);
+      
+      console.log('Saved spelling attempt, new count:', attempts.length);
 
       // Update points if correct
       if (isCorrect && points > 0) {
@@ -75,18 +87,23 @@ export async function POST(request: NextRequest) {
           amount: points,
           timestamp: new Date().toISOString()
         };
+        
+        console.log('Adding points entry:', newPointsEntry);
         pointsData.push(newPointsEntry);
         await writePoints(pointsData);
+        console.log('Points saved, new count:', pointsData.length);
       }
 
       // Update special practice list
       await updateSpecialPracticeList(userId, wordId, isCorrect);
+      console.log('Special practice list updated');
 
     } catch (fileError) {
       console.error('File system operation failed:', fileError);
       // Continue anyway and return the result
     }
 
+    console.log('Returning response...');
     return NextResponse.json({
       correct: isCorrect,
       points: points,
