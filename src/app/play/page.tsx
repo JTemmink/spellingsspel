@@ -166,6 +166,45 @@ export default function PlayPage() {
     }
   };
 
+  const endPracticeSession = useCallback(async () => {
+    if (!sessionId) return;
+    
+    try {
+      await fetch('/api/practice-sessions', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+    } catch (error) {
+      console.error('Error ending practice session:', error);
+    }
+  }, [sessionId]);
+
+  const nextWord = useCallback((session: GameSession) => {
+    const nextIndex = session.currentWordIndex + 1;
+    
+    if (nextIndex >= session.words.length) {
+      // Game complete - end the practice session
+      endPracticeSession();
+      setGameComplete(true);
+      setFeedback({ type: null, message: '' });
+      return;
+    }
+
+    const nextWordItem = session.words[nextIndex];
+    const updatedSession = { ...session, currentWordIndex: nextIndex };
+    
+    setGameSession(updatedSession);
+    setCurrentWord(nextWordItem);
+    setFeedback({ type: null, message: '' });
+    setShowExplanation(false);
+    
+    // Speak the next word
+    setTimeout(() => {
+      speakWord(nextWordItem.word);
+    }, 500);
+  }, [endPracticeSession]);
+
   const handleSubmit = useCallback(async () => {
     if (!currentWord || !gameSession || !settings || userInput.trim() === '' || isProcessing || !sessionId) return;
 
@@ -241,46 +280,7 @@ export default function PlayPage() {
       setIsProcessing(false);
       setUserInput('');
     }
-  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord]);
-
-  const endPracticeSession = useCallback(async () => {
-    if (!sessionId) return;
-    
-    try {
-      await fetch('/api/practice-sessions', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId })
-      });
-    } catch (error) {
-      console.error('Error ending practice session:', error);
-    }
-  }, [sessionId]);
-
-  const nextWord = useCallback((session: GameSession) => {
-    const nextIndex = session.currentWordIndex + 1;
-    
-    if (nextIndex >= session.words.length) {
-      // Game complete - end the practice session
-      endPracticeSession();
-      setGameComplete(true);
-      setFeedback({ type: null, message: '' });
-      return;
-    }
-
-    const nextWordItem = session.words[nextIndex];
-    const updatedSession = { ...session, currentWordIndex: nextIndex };
-    
-    setGameSession(updatedSession);
-    setCurrentWord(nextWordItem);
-    setFeedback({ type: null, message: '' });
-    setShowExplanation(false);
-    
-    // Speak the next word
-    setTimeout(() => {
-      speakWord(nextWordItem.word);
-    }, 500);
-  }, [endPracticeSession]);
+  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId]);
 
   const repeatWord = () => {
     if (currentWord) {
