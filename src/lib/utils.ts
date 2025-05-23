@@ -150,7 +150,7 @@ export function isSpeechSupported(): boolean {
 }
 
 // Debounce function for input handling
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

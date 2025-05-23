@@ -1,14 +1,11 @@
 import { 
   Word, 
-  SpellingAttempt, 
   SpecialPracticeItem, 
   Settings,
-  WordList,
   readSpecialPracticeList,
   writeSpecialPracticeList,
   readSettings,
   readWordLists,
-  writeWordLists,
   readWords,
   writeWords,
   generateId
@@ -91,7 +88,7 @@ export async function getWordsForPractice(
   selectedWords: Word[],
   includeSpecialWords: boolean = true
 ): Promise<Word[]> {
-  let practiceWords = [...selectedWords];
+  const practiceWords = [...selectedWords];
 
   if (includeSpecialWords) {
     const specialList = await readSpecialPracticeList();
