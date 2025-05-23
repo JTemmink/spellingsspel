@@ -4,24 +4,21 @@ import { supabase } from '@/lib/supabaseClient';
 // GET /api/word-lists - Haal alle woordlijsten op voor een user
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const userId = searchParams.get('userId') || 'user_1';
-
+    // For now, get all word lists regardless of user_id (since migration is in progress)
     const { data: wordLists, error } = await supabase
       .from('word_lists')
       .select('*')
-      .eq('user_id', userId)
       .order('created_at', { ascending: true });
 
     if (error) {
       console.error('Supabase error:', error);
-      return NextResponse.json({ error: 'Failed to fetch word lists' }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to fetch word lists', details: error.message }, { status: 500 });
     }
 
     return NextResponse.json({ wordLists });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching word lists:', error);
-    return NextResponse.json({ error: 'Failed to fetch word lists' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch word lists', details: error.message }, { status: 500 });
   }
 }
 
