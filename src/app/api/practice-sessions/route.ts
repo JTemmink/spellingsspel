@@ -14,6 +14,7 @@ interface PracticeSession {
 }
 
 // Fallback session storage (in-memory for demo purposes)
+// eslint-disable-next-line prefer-const
 let fallbackSessions: PracticeSession[] = [];
 let sessionIdCounter = 1;
 

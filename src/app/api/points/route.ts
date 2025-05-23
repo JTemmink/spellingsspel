@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 // Fallback points storage (in-memory for demo purposes)
+// eslint-disable-next-line prefer-const
 let fallbackPoints: { [userId: string]: number } = {
   'user_1': 0
 };
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
 
     try {
       // Get current points first
-      const { data: currentData, error: fetchError } = await supabase
+      const { data: currentData } = await supabase
         .from('points')
         .select('total_points')
         .eq('user_id', userId)
