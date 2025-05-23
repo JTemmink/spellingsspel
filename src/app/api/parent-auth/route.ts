@@ -20,16 +20,14 @@ export async function POST(request: NextRequest) {
 
     if (error || !settings) {
       // Als er geen settings zijn, maak default settings aan met wachtwoord "1001"
-      const { data: newSettings, error: createError } = await supabase
+      const { error: createError } = await supabase
         .from('settings')
         .insert([{
           user_id: 'user_1',
           correct_word_points: 10,
           streak_points: 5,
           time_threshold: 15
-        }])
-        .select()
-        .single();
+        }]);
 
       if (createError) {
         console.error('Error creating default settings:', createError);
