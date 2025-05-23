@@ -1,74 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 // POST /api/parent-auth - Verify parent password
 export async function POST(request: NextRequest) {
   try {
+    console.log('Parent auth route called');
+    
     const body = await request.json();
+    console.log('Received body:', body);
+    
     const { password } = body;
+    console.log('Password:', password);
 
     if (!password) {
+      console.log('No password provided');
       return NextResponse.json({ error: 'Password is required' }, { status: 400 });
     }
 
-    // If Supabase is not configured, use fallback password (for development/demo)
-    if (!isSupabaseConfigured) {
-      console.log('Supabase not configured, using fallback authentication');
-      const isValidPassword = password === '1001';
-      return NextResponse.json({ 
-        success: isValidPassword,
-        message: isValidPassword ? 'Login successful (fallback mode)' : 'Invalid password'
-      });
-    }
-
-    // Try to get settings from Supabase with error handling
-    try {
-      const { data: settings, error } = await supabase
-        .from('settings')
-        .select('*')
-        .eq('user_id', 'user_1')
-        .single();
-
-      if (error || !settings) {
-        // Fall back to hardcoded password if database is unavailable
-        console.log('Database settings not available, using fallback');
-        const isValidPassword = password === '1001';
-        return NextResponse.json({ 
-          success: isValidPassword,
-          message: isValidPassword ? 'Login successful (fallback mode)' : 'Invalid password'
-        });
-      }
-
-      // Use database settings if available
-      const isValidPassword = password === '1001'; // Still hardcoded for now
-      return NextResponse.json({ 
-        success: isValidPassword,
-        message: isValidPassword ? 'Login successful' : 'Invalid password'
-      });
-
-    } catch (dbError) {
-      // Database error - fall back to hardcoded password
-      console.log('Database error, using fallback authentication:', dbError);
-      const isValidPassword = password === '1001';
-      return NextResponse.json({ 
-        success: isValidPassword,
-        message: isValidPassword ? 'Login successful (fallback mode)' : 'Invalid password'
-      });
-    }
+    // Simpele hardcoded check voor nu
+    const isValidPassword = password === '1001';
+    console.log('Password check result:', isValidPassword);
+    
+    return NextResponse.json({ 
+      success: isValidPassword,
+      message: isValidPassword ? 'Login successful' : 'Invalid password'
+    });
 
   } catch (error) {
     console.error('Error in parent auth:', error);
-    // Even in case of complete failure, provide fallback authentication
-    try {
-      const body = await request.json();
-      const isValidPassword = body.password === '1001';
-      return NextResponse.json({ 
-        success: isValidPassword,
-        message: isValidPassword ? 'Login successful (emergency fallback)' : 'Invalid password'
-      });
-    } catch {
-      return NextResponse.json({ error: 'Authentication service unavailable' }, { status: 503 });
-    }
+    return NextResponse.json({ error: 'Authentication error' }, { status: 500 });
   }
 }
 
