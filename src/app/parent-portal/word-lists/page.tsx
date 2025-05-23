@@ -384,7 +384,7 @@ export default function WordListsPage() {
                   {selectedList ? (
                     <>
                       <h2 className="card-title">
-                        Woorden in "{wordLists.find(l => l.id === selectedList)?.name}"
+                        Woorden in &quot;{wordLists.find(l => l.id === selectedList)?.name}&quot;
                       </h2>
                       <div className="overflow-x-auto">
                         <table className="table">
