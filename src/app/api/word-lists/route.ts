@@ -35,17 +35,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User ID and name are required' }, { status: 400 });
     }
 
-    const wordLists = await readWordLists();
-    const newWordList: WordList = {
-      id: generateId('list'),
-      user_id,
-      name: name.trim(),
-      description: description?.trim() || '',
-      difficulty: difficulty || 'Gemiddeld'
-    };
+    const { data: newWordList, error } = await supabase
+      .from('word_lists')
+      .insert([{
+        user_id,
+        name: name.trim(),
+        description: description?.trim() || '',
+        difficulty: difficulty || 'Gemiddeld'
+      }])
+      .select()
+      .single();
 
-    wordLists.push(newWordList);
-    await writeWordLists(wordLists);
+    if (error) {
+      console.error('Supabase error:', error);
+      return NextResponse.json({ error: 'Failed to create word list' }, { status: 500 });
+    }
 
     return NextResponse.json(newWordList, { status: 201 });
   } catch (error) {
@@ -64,22 +68,27 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'ID and name are required' }, { status: 400 });
     }
 
-    const wordLists = await readWordLists();
-    const listIndex = wordLists.findIndex(list => list.id === id);
+    const { data: updatedWordList, error } = await supabase
+      .from('word_lists')
+      .update({
+        name: name.trim(),
+        description: description?.trim() || '',
+        difficulty: difficulty || 'Gemiddeld'
+      })
+      .eq('id', id)
+      .select()
+      .single();
 
-    if (listIndex === -1) {
+    if (error) {
+      console.error('Supabase error:', error);
+      return NextResponse.json({ error: 'Failed to update word list' }, { status: 500 });
+    }
+
+    if (!updatedWordList) {
       return NextResponse.json({ error: 'Word list not found' }, { status: 404 });
     }
 
-    wordLists[listIndex] = {
-      ...wordLists[listIndex],
-      name: name.trim(),
-      description: description?.trim() || '',
-      difficulty: difficulty || 'Gemiddeld'
-    };
-    await writeWordLists(wordLists);
-
-    return NextResponse.json(wordLists[listIndex]);
+    return NextResponse.json(updatedWordList);
   } catch (error) {
     console.error('Error updating word list:', error);
     return NextResponse.json({ error: 'Failed to update word list' }, { status: 500 });
@@ -96,15 +105,27 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
-    // Remove the word list
-    const wordLists = await readWordLists();
-    const updatedWordLists = wordLists.filter(list => list.id !== id);
-    await writeWordLists(updatedWordLists);
+    // Remove all words associated with this list first (due to foreign key constraint)
+    const { error: wordsError } = await supabase
+      .from('words')
+      .delete()
+      .eq('list_id', id);
 
-    // Remove all words associated with this list
-    const words = await readWords();
-    const updatedWords = words.filter(word => word.list_id !== id);
-    await writeWords(updatedWords);
+    if (wordsError) {
+      console.error('Supabase error deleting words:', wordsError);
+      return NextResponse.json({ error: 'Failed to delete associated words' }, { status: 500 });
+    }
+
+    // Remove the word list
+    const { error: listError } = await supabase
+      .from('word_lists')
+      .delete()
+      .eq('id', id);
+
+    if (listError) {
+      console.error('Supabase error deleting word list:', listError);
+      return NextResponse.json({ error: 'Failed to delete word list' }, { status: 500 });
+    }
 
     return NextResponse.json({ message: 'Word list deleted successfully' });
   } catch (error) {
