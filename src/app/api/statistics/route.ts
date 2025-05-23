@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
       });
 
       const difficultWords = Array.from(wordStats.entries())
-        .map(([wordId, stats]) => ({
+        .map(([, stats]) => ({
           word: stats.word,
           attempts: stats.attempts,
           correct: stats.correct,
