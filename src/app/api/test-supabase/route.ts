@@ -6,7 +6,7 @@ export async function GET() {
     // Test basic Supabase connection
     const { data, error } = await supabase
       .from('word_lists')
-      .select('count(*)')
+      .select('id, name')
       .limit(1);
 
     if (error) {
@@ -20,6 +20,7 @@ export async function GET() {
     return NextResponse.json({ 
       success: true, 
       message: 'Supabase connection works!',
+      rowCount: data?.length || 0,
       data 
     });
 
