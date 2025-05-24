@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isVercel } from '@/lib/supabaseClient';
 
 // GET /api/statistics - Get user statistics
-export async function GET(request: NextRequest) {  try {    const { searchParams } = new URL(request.url);    const userId = searchParams.get('userId') || 'user_1';        console.log('Statistics API called for user:', userId);
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId') || 'user_1';
+    
+    console.log('Statistics API called for user:', userId);
 
     // If running on Vercel, return mock statistics
     if (isVercel) {
@@ -157,7 +162,16 @@ export async function GET(request: NextRequest) {  try {    const { searchParams
         difficultWords
       };
 
-            const response = NextResponse.json({ statistics });            // Prevent caching to ensure fresh data      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');      response.headers.set('Pragma', 'no-cache');      response.headers.set('Expires', '0');            return response;    } catch (fileError) {
+      const response = NextResponse.json({ statistics });
+      
+      // Prevent caching to ensure fresh data
+      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      response.headers.set('Pragma', 'no-cache');
+      response.headers.set('Expires', '0');
+      
+      return response;
+
+    } catch (fileError) {
       console.error('File system operation failed:', fileError);
       
       // Return empty statistics on error

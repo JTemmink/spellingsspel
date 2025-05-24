@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Simple spelling check
-    const isCorrect = userInput.toLowerCase().trim() === word.toLowerCase().trim();
+    const isCorrect = userInput.trim() === word.trim();
     
     // Calculate points
     const points = isCorrect ? (settings.correct_word_points || 10) : 0;

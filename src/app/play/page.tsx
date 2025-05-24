@@ -43,9 +43,7 @@ export default function PlayPage() {
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
   const [currentWord, setCurrentWord] = useState<Word | null>(null);
   const [userInput, setUserInput] = useState('');
-  const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+    const [feedback, setFeedback] = useState<{ type: 'correct' | 'incorrect' | null; message: string }>({ type: null, message: '' });  const [showExplanation, setShowExplanation] = useState(false);  const [needsRetry, setNeedsRetry] = useState(false);  const [isLoading, setIsLoading] = useState(true);
   const [gameComplete, setGameComplete] = useState(false);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -194,10 +192,7 @@ export default function PlayPage() {
     const nextWordItem = session.words[nextIndex];
     const updatedSession = { ...session, currentWordIndex: nextIndex };
     
-    setGameSession(updatedSession);
-    setCurrentWord(nextWordItem);
-    setFeedback({ type: null, message: '' });
-    setShowExplanation(false);
+        setGameSession(updatedSession);    setCurrentWord(nextWordItem);    setFeedback({ type: null, message: '' });    setShowExplanation(false);    setNeedsRetry(false);
     
     // Speak the next word
     setTimeout(() => {
@@ -264,22 +259,14 @@ export default function PlayPage() {
         setTimeout(() => {
           nextWord(updatedSession);
         }, 2000);
-      } else {
-        setFeedback({ 
-          type: 'incorrect', 
-          message: `❌ Helaas, dat is niet goed. Het correcte woord is "${currentWord.word}".` 
-        });
-      }
+            } else {        setFeedback({           type: 'incorrect',           message: `❌ Helaas, dat is niet goed. Het correcte woord is "${currentWord.word}". Probeer het opnieuw!`         });        setShowExplanation(true);        setNeedsRetry(true);      }
     } catch (error) {
       console.error('Error processing spelling attempt:', error);
       setFeedback({ 
         type: 'incorrect', 
         message: 'Er ging iets mis. Probeer het opnieuw.' 
       });
-    } finally {
-      setIsProcessing(false);
-      setUserInput('');
-    }
+        } finally {      setIsProcessing(false);      if (!needsRetry) {        setUserInput('');      }    }
   }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord]);
 
   const repeatWord = () => {
@@ -592,7 +579,7 @@ export default function PlayPage() {
           <input
             type="text"
             value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
+            onChange={(e) => {              setUserInput(e.target.value);              if (e.target.value && needsRetry) {                setFeedback({ type: null, message: '' });                setShowExplanation(false);                setNeedsRetry(false);              }            }}
             onKeyPress={handleKeyPress}
             placeholder="Typ hier het woord..."
             className="input input-bordered input-lg w-full text-center text-2xl font-bubblegum"

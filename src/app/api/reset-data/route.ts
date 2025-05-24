@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { isVercel } from '@/lib/supabaseClient';
 
 // POST /api/reset-data - Reset all user data
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // If running on Vercel, just return success (can't write files)
     if (isVercel) {
@@ -41,12 +41,7 @@ export async function POST(request: NextRequest) {
         message: 'Alle data is succesvol gereset!' 
       });
 
-    } catch (fileError) {
-      console.error('File system operation failed:', fileError);
-      return NextResponse.json({ 
-        success: false, 
-        error: 'Failed to reset data: ' + fileError.message 
-      }, { status: 500 });
+        } catch (fileError) {      console.error('File system operation failed:', fileError);      return NextResponse.json({         success: false,         error: 'Failed to reset data: ' + (fileError instanceof Error ? fileError.message : 'Unknown error')       }, { status: 500 });
     }
 
   } catch (error) {
