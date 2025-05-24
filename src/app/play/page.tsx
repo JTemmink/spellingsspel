@@ -267,7 +267,7 @@ export default function PlayPage() {
         message: 'Er ging iets mis. Probeer het opnieuw.' 
       });
         } finally {      setIsProcessing(false);      if (!needsRetry) {        setUserInput('');      }    }
-  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord]);
+  }, [currentWord, gameSession, settings, userInput, isProcessing, sessionId, nextWord, needsRetry]);
 
   const repeatWord = () => {
     if (currentWord) {
