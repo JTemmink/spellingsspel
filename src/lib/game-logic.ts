@@ -102,34 +102,3 @@ export function shuffleArray<T>(array: T[]): T[] {
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-// Check if user has daily streak
-export function checkDailyStreak(lastPlayDate: string | null): boolean {
-  if (!lastPlayDate) return false;
-  
-  const lastPlay = new Date(lastPlayDate);
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  
-  // Check if last play was yesterday
-  return (
-    lastPlay.toDateString() === yesterday.toDateString() ||
-    lastPlay.toDateString() === today.toDateString()
-  );
-}
-
-// Calculate streak points
-export async function calculateStreakPoints(userId: string): Promise<number> {
-  const settings = await readSettings();
-  const userSettings = settings.find(s => s.user_id === userId);
-  
-  if (!userSettings) return 0;
-  
-  // This would need to be integrated with practice sessions
-  // For now, return base streak points
-  return userSettings.streak_points;
-} 
