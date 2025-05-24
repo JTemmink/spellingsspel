@@ -82,7 +82,7 @@ export async function POST() {
   } catch (error) {
     return NextResponse.json({ 
       success: false, 
-      error: 'Fout bij resetten van data' 
+      error: 'Fout bij resetten van data: ' + (error instanceof Error ? error.message : 'Onbekende fout')
     }, { status: 500 });
   }
 } 
