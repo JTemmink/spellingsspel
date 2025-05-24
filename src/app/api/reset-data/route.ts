@@ -15,7 +15,7 @@ export async function POST() {
           'special_practice_list'
         ];
         for (const table of tables) {
-          const res = await supabase.from(table).delete().neq('id', '');
+          const res = await supabase.from(table).delete();
           if (res.error) {
             return NextResponse.json({
               success: false,
