@@ -1,14 +1,45 @@
 import { NextResponse } from 'next/server';
-import { isVercel } from '@/lib/supabaseClient';
+import { isVercel, supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 // POST /api/reset-data - Reset all user data
 export async function POST() {
   try {
-    // If running on Vercel, geef een duidelijke foutmelding
+    // Supabase reset
+    if (isSupabaseConfigured) {
+      try {
+        // Let op: alleen uitvoeren met service role key!
+        const tables = [
+          'spelling_attempts',
+          'practice_sessions',
+          'points',
+          'special_practice_list'
+        ];
+        for (const table of tables) {
+          const { error } = await supabase.from(table).delete().neq('id', '');
+          if (error) {
+            return NextResponse.json({
+              success: false,
+              error: `Fout bij resetten van ${table}: ${error.message}`
+            }, { status: 500 });
+          }
+        }
+        return NextResponse.json({
+          success: true,
+          message: 'Alle Supabase data is succesvol gereset!'
+        });
+      } catch (supabaseError) {
+        return NextResponse.json({
+          success: false,
+          error: 'Fout bij resetten van Supabase data: ' + (supabaseError instanceof Error ? supabaseError.message : 'Onbekende fout')
+        }, { status: 500 });
+      }
+    }
+
+    // If running on Vercel zonder Supabase, geef een duidelijke foutmelding
     if (isVercel) {
       return NextResponse.json({ 
         success: false, 
-        error: 'Resetten van data is niet mogelijk op Vercel (read-only filesystem). Probeer lokaal.' 
+        error: 'Resetten van data is niet mogelijk op Vercel zonder Supabase (read-only filesystem). Probeer lokaal.' 
       }, { status: 500 });
     }
 
