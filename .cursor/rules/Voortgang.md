@@ -96,6 +96,7 @@ spellingsspel/
 - [x] Sessie management met game completion
 - [x] Lijst-selectie scherm voor woordlijst keuze
 - [x] Automatische cursor focus in input veld
+- [x] **[2025-01-23] Punten alleen bij eerste correcte poging per woord in een sessie. Geen punten meer na een fout.**
 
 ### ✅ FASE 5: Punten & Progressie Systeem
 - [x] Punten berekening logica (geïmplementeerd in API)
@@ -127,6 +128,7 @@ spellingsspel/
 - [x] Automatische speciale lijst beheer
 - [x] 5-dagen correcte regel
 - [x] Verhoogde frequentie in sessies
+- [x] **[2025-01-23] Elk fout gespeld woord wordt direct toegevoegd aan de moeilijke woorden lijst. Structuur en logica volledig conform requirements.**
 
 ### ✅ FASE 8: Animaties & Polish
 - [x] Framer Motion animaties (volledig geïmplementeerd)
@@ -139,7 +141,6 @@ spellingsspel/
 - [ ] OpenAI API integratie
 - [ ] Automatische uitleg generatie
 - [ ] Geavanceerde statistieken
-- [ ] Export/import functionaliteit
 
 ### 🧪 FASE 10: Testing & Deployment
 - [ ] Unit tests voor core functies

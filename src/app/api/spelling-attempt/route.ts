@@ -13,26 +13,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Simple spelling check
+    // Case-sensitive spelling check
     const isCorrect = userInput.trim() === word.trim();
-    
-    // Calculate points
-    const points = isCorrect ? (settings.correct_word_points || 10) : 0;
+    let points = isCorrect ? (settings.correct_word_points || 10) : 0;
+    let alreadyWrong = false;
 
-    console.log('Spelling result:', { isCorrect, points, isVercel });
-
-    // If running on Vercel, we can't write to files, so just return the result
     if (isVercel) {
-      console.log('Spelling attempt (Vercel mode):', {
-        userId,
-        wordId,
-        word,
-        userInput,
-        isCorrect,
-        points,
-        sessionId
-      });
-
+      // In Vercel mode geen bestandschecks, alleen feedback
       return NextResponse.json({
         correct: isCorrect,
         points: points,
@@ -56,7 +43,16 @@ export async function POST(request: NextRequest) {
         updateSpecialPracticeList 
       } = await import('@/lib/game-logic');
 
-      // Create spelling attempt record
+      // Check of dit woord in deze sessie al fout is gegaan
+      const attempts = await readSpellingAttempts();
+      alreadyWrong = attempts.some(a => a.session_id === sessionId && a.word_id === wordId && a.correct === false);
+
+      // Punten alleen als het de eerste poging is (nog geen fout gemaakt)
+      if (alreadyWrong) {
+        points = 0;
+      }
+
+      // Sla de poging op
       const spellingAttempt = {
         id: generateId('attempt'),
         session_id: sessionId,
@@ -68,21 +64,18 @@ export async function POST(request: NextRequest) {
       console.log('Created spelling attempt:', spellingAttempt);
 
       // Save spelling attempt
-      const attempts = await readSpellingAttempts();
-      console.log('Current attempts count:', attempts.length);
-      
       attempts.push(spellingAttempt);
       await writeSpellingAttempts(attempts);
       
       console.log('Saved spelling attempt, new count:', attempts.length);
 
-      // Update points if correct
+      // Punten alleen als correct en niet eerder fout
       if (isCorrect && points > 0) {
         const pointsData = await readPoints();
         const newPointsEntry = {
           id: generateId('points'),
           user_id: userId,
-          total_points: 0, // Will be calculated by frontend
+          total_points: 0, // Wordt door frontend/statistiek berekend
           activity_type: 'correct_word',
           amount: points,
           timestamp: new Date().toISOString()
@@ -94,7 +87,7 @@ export async function POST(request: NextRequest) {
         console.log('Points saved, new count:', pointsData.length);
       }
 
-      // Update special practice list
+      // Update moeilijke woorden lijst: altijd aanroepen, ook bij correct (voor streaks)
       await updateSpecialPracticeList(userId, wordId, isCorrect);
       console.log('Special practice list updated');
 
