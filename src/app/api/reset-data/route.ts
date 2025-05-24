@@ -15,11 +15,11 @@ export async function POST() {
           'special_practice_list'
         ];
         for (const table of tables) {
-          const { error } = await supabase.from(table).delete().neq('id', '');
-          if (error) {
+          const res = await supabase.from(table).delete().neq('id', '');
+          if (res.error) {
             return NextResponse.json({
               success: false,
-              error: `Fout bij resetten van ${table}: ${error.message}`
+              error: `Fout bij resetten van ${table}: ${res.error.message}`
             }, { status: 500 });
           }
         }
