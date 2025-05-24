@@ -4,13 +4,15 @@ import { isVercel } from '@/lib/supabaseClient';
 // POST /api/reset-data - Reset all user data
 export async function POST() {
   try {
-    // If running on Vercel, just return success (can't write files)
+    // If running on Vercel, geef een duidelijke foutmelding
     if (isVercel) {
-      console.log('Data reset attempted (Vercel mode) - cannot reset files');
-      return NextResponse.json({ success: true, message: 'Data reset attempted (Vercel mode)' });
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Resetten van data is niet mogelijk op Vercel (read-only filesystem). Probeer lokaal.' 
+      }, { status: 500 });
     }
 
-    // Local development with file system access
+    // Local development met file system access
     try {
       const {
         writeSpellingAttempts,
@@ -34,21 +36,22 @@ export async function POST() {
         writeSpecialPracticeList([])
       ]);
 
-      console.log('All user data has been reset successfully');
-      
       return NextResponse.json({ 
         success: true, 
         message: 'Alle data is succesvol gereset!' 
       });
 
-        } catch (fileError) {      console.error('File system operation failed:', fileError);      return NextResponse.json({         success: false,         error: 'Failed to reset data: ' + (fileError instanceof Error ? fileError.message : 'Unknown error')       }, { status: 500 });
+    } catch (fileError) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Fout bij resetten van data: ' + (fileError instanceof Error ? fileError.message : 'Onbekende fout') 
+      }, { status: 500 });
     }
 
   } catch (error) {
-    console.error('Error processing data reset:', error);
     return NextResponse.json({ 
       success: false, 
-      error: 'Failed to reset data' 
+      error: 'Fout bij resetten van data' 
     }, { status: 500 });
   }
 } 
