@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'List ID and word are required' }, { status: 400 });
     }
 
-    const { data: newWord, error } = await supabase
+    const res = await supabase
       .from('words')
       .insert([{
         list_id,
@@ -97,12 +97,12 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (error) {
-      console.error('Supabase error:', error);
+    if (res.error) {
+      console.error('Supabase error:', res.error);
       return NextResponse.json({ error: 'Failed to create word' }, { status: 500 });
     }
 
-    return NextResponse.json(newWord, { status: 201 });
+    return NextResponse.json(res.data, { status: 201 });
   } catch (error) {
     console.error('Error creating word:', error);
     return NextResponse.json({ error: 'Failed to create word' }, { status: 500 });
@@ -124,7 +124,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'ID and word are required' }, { status: 400 });
     }
 
-    const { data: updatedWord, error } = await supabase
+    const res = await supabase
       .from('words')
       .update({
         word: word.trim(),
@@ -134,16 +134,16 @@ export async function PUT(request: NextRequest) {
       .select()
       .single();
 
-    if (error) {
-      console.error('Supabase error:', error);
+    if (res.error) {
+      console.error('Supabase error:', res.error);
       return NextResponse.json({ error: 'Failed to update word' }, { status: 500 });
     }
 
-    if (!updatedWord) {
+    if (!res.data) {
       return NextResponse.json({ error: 'Word not found' }, { status: 404 });
     }
 
-    return NextResponse.json(updatedWord);
+    return NextResponse.json(res.data);
   } catch (error) {
     console.error('Error updating word:', error);
     return NextResponse.json({ error: 'Failed to update word' }, { status: 500 });
@@ -165,13 +165,13 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
-    const { error } = await supabase
+    const res = await supabase
       .from('words')
       .delete()
       .eq('id', id);
 
-    if (error) {
-      console.error('Supabase error:', error);
+    if (res.error) {
+      console.error('Supabase error:', res.error);
       return NextResponse.json({ error: 'Failed to delete word' }, { status: 500 });
     }
 

@@ -140,7 +140,7 @@ spellingsspel/
 ### 🤖 FASE 9: AI & Optionele Features (optioneel)
 - [ ] OpenAI API integratie
 - [ ] Automatische uitleg generatie
-- [ ] Geavanceerde statistieken
+- [x] Geavanceerde statistieken
 
 ### 🧪 FASE 10: Testing & Deployment
 - [ ] Unit tests voor core functies

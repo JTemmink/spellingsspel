@@ -63,14 +63,14 @@ export async function PUT(request: NextRequest) {
     }
 
     try {
-      const { error } = await supabase
+      const res = await supabase
         .from('points')
         .upsert({
           user_id: userId,
           total_points: totalPoints
         });
 
-      if (error) {
+      if (res.error) {
         // Fallback to in-memory storage
         fallbackPoints[userId] = totalPoints;
       }
@@ -115,14 +115,14 @@ export async function POST(request: NextRequest) {
       const currentPoints = currentData?.total_points || 0;
       const newTotal = currentPoints + pointsToAdd;
 
-      const { error } = await supabase
+      const res = await supabase
         .from('points')
         .upsert({
           user_id: userId,
           total_points: newTotal
         });
 
-      if (error) {
+      if (res.error) {
         // Fallback to in-memory storage
         fallbackPoints[userId] = (fallbackPoints[userId] || 0) + pointsToAdd;
         return NextResponse.json({ totalPoints: fallbackPoints[userId] });

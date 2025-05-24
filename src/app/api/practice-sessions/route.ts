@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      const { data: newSession, error } = await supabase
+      const res = await supabase
         .from('practice_sessions')
         .insert([{
           user_id: userId,
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         .select()
         .single();
 
-      if (error) {
+      if (res.error) {
         // Fallback to in-memory storage
         const fallbackSession: PracticeSession = {
           id: sessionId,
@@ -85,8 +85,8 @@ export async function POST(request: NextRequest) {
       }
 
       return NextResponse.json({ 
-        sessionId: newSession.id,
-        startTime: newSession.start_time
+        sessionId: res.data.id,
+        startTime: res.data.start_time
       });
     } catch (dbError) {
       console.log('Database error, using fallback session:', dbError);
@@ -144,7 +144,7 @@ export async function PUT(request: NextRequest) {
     }
 
     try {
-      const { error } = await supabase
+      const res = await supabase
         .from('practice_sessions')
         .update({
           end_time: endTime,
@@ -154,7 +154,7 @@ export async function PUT(request: NextRequest) {
         })
         .eq('id', sessionId);
 
-      if (error) {
+      if (res.error) {
         console.log('Database update error, using fallback');
       }
 
