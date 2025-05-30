@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest) {
   if (!isSupabaseConfigured) {
     return NextResponse.json({ error: 'Database niet geconfigureerd' }, { status: 503 });
   }
-  const { id } = params;
+  const url = new URL(request.url);
+  const id = url.pathname.split('/').pop();
+
   if (!id) {
     return NextResponse.json({ error: 'ID is verplicht' }, { status: 400 });
   }
