@@ -1,4 +1,5 @@
-import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readSettings,  readWords,  generateId, shuffleArray } from './database';
+import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readSettings,  readWords,  generateId } from './database';
+import { shuffleArray } from '../lib/utils';
 
 // Check if a spelling attempt is correct
 export function checkSpelling(inputWord: string, correctWord: string): boolean {
