@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, inserted: data }, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to add words' }, { status: 500 });
   }
 }
