@@ -1,4 +1,4 @@
-import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readSettings,  readWords,  generateId } from './database';
+import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readWords,  generateId } from './database';
 import { shuffleArray } from '../lib/utils';
 
 // Check if a spelling attempt is correct
