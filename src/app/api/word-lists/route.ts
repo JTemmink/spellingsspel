@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
+import { parseWoordlijstenMd } from '@/lib/parseWoordlijsten';
 
 // Fallback data for when database is not available
 const fallbackWordLists = [
@@ -21,10 +22,17 @@ const fallbackWordLists = [
 
 // GET /api/word-lists - Haal alle woordlijsten op voor een user
 export async function GET() {
-  // If Supabase is not configured, return fallback data
+  // If Supabase is not configured, return data from woordlijsten.md
   if (!isSupabaseConfigured) {
-    console.log('Supabase not configured, returning fallback word lists');
-    return NextResponse.json({ wordLists: fallbackWordLists });
+    const lijsten = parseWoordlijstenMd();
+    const wordLists = lijsten.map((l, i) => ({
+      id: `md_list_${i + 1}`,
+      name: l.name,
+      description: '',
+      difficulty: 'Onbekend',
+      created_at: new Date().toISOString()
+    }));
+    return NextResponse.json({ wordLists });
   }
 
   try {

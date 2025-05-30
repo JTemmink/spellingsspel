@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
+import { parseWoordlijstenMd } from '@/lib/parseWoordlijsten';
 
 // Type definition for word objects
 interface Word {
@@ -32,10 +33,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'List ID is required' }, { status: 400 });
     }
 
-    // If Supabase is not configured, return fallback data
+    // If Supabase is not configured, return words from woordlijsten.md
     if (!isSupabaseConfigured) {
-      console.log('Supabase not configured, returning fallback words for list:', listId);
-      const words = fallbackWords[listId] || fallbackWords['list_1_fallback'];
+      const lijsten = parseWoordlijstenMd();
+      const index = parseInt(listId.replace('md_list_', '')) - 1;
+      const lijst = lijsten[index];
+      const words = lijst
+        ? lijst.words.map((w, j) => ({ id: `md_word_${index + 1}_${j + 1}`, word: w, explanation: '' }))
+        : [];
       return NextResponse.json({ words });
     }
 
