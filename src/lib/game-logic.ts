@@ -1,4 +1,4 @@
-import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readSettings,  readWords,  generateId} from './database';
+import {   Word,   SpecialPracticeItem,   Settings,  readSpecialPracticeList,  writeSpecialPracticeList,  readSettings,  readWords,  generateId, shuffleArray } from './database';
 
 // Check if a spelling attempt is correct
 export function checkSpelling(inputWord: string, correctWord: string): boolean {
@@ -95,10 +95,3 @@ export async function getPracticeWords(
   // Shuffle the array
   return shuffleArray(practiceWords);
 }
-
-// Shuffle array utility function
-export function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
