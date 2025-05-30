@@ -45,37 +45,23 @@ export default function WordListsPage() {
   
   const router = useRouter();
 
-  useEffect(() => {
-    setMounted(true);
-    
-    // Check authentication
-    const auth = localStorage.getItem('parentAuth');
-    if (auth !== 'true') {
-      router.push('/parent-portal/login');
-      return;
-    }
-
-    loadData();
-  }, [router]);
-
-  const loadData = async () => {
+  const loadData = async (listId?: string) => {
     try {
       setIsLoading(true);
-      
-      // Load word lists and words in parallel
-      const [listsResponse, wordsResponse] = await Promise.all([
-        fetch('/api/word-lists?userId=user_1'),
-        fetch('/api/word-lists/words')
-      ]);
-
+      const listsResponse = await fetch('/api/word-lists?userId=user_1');
       if (listsResponse.ok) {
         const listsData = await listsResponse.json();
         setWordLists(listsData.wordLists || []);
       }
-
+      let wordsResponse = { ok: false, json: async () => ({ words: [] }) };
+      if (listId) {
+        wordsResponse = await fetch(`/api/word-lists/words?listId=${listId}`);
+      }
       if (wordsResponse.ok) {
         const wordsData = await wordsResponse.json();
         setWords(wordsData.words || []);
+      } else {
+        setWords([]);
       }
     } catch (error) {
       console.error('Error loading data:', error);
@@ -83,6 +69,16 @@ export default function WordListsPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setMounted(true);
+    const auth = localStorage.getItem('parentAuth');
+    if (auth !== 'true') {
+      router.push('/parent-portal/login');
+      return;
+    }
+    loadData(selectedList);
+  }, [router, selectedList]);
 
   // Word functions
   const handleAddWord = async () => {
