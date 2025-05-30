@@ -62,11 +62,11 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { user_id, name, description, difficulty } = body;
-    const finalUserId = user_id || 'bfad267c-e95e-49b5-9150-bf2ac51ee04a';
+    const { name, description, difficulty } = body;
+    const finalUserId = 'bfad267c-e95e-49b5-9150-bf2ac51ee04a';
 
-    if (!finalUserId || !name) {
-      return NextResponse.json({ error: 'User ID and name are required' }, { status: 400 });
+    if (!name) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
     }
 
     const { data: newWordList, error } = await supabase
