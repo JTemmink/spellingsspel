@@ -79,38 +79,35 @@ export async function GET(request: NextRequest) {
 
 // POST /api/word-lists/words - Voeg een nieuw woord toe aan een woordlijst
 export async function POST(request: NextRequest) {
-  // Early return if Supabase is not configured
   if (!isSupabaseConfigured) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 });
   }
 
   try {
     const body = await request.json();
-    const { list_id, word, explanation } = body;
+    const { list_id, words } = body;
 
-    if (!list_id || !word) {
-      return NextResponse.json({ error: 'List ID and word are required' }, { status: 400 });
+    if (!list_id || !words || !Array.isArray(words) || words.length === 0) {
+      return NextResponse.json({ error: 'List ID and words array are required' }, { status: 400 });
     }
 
-    const res = await supabase
+    const inserts = words.map(word => ({
+      list_id,
+      word: word.trim(),
+      explanation: ''
+    }));
+
+    const { data, error } = await supabase
       .from('words')
-      .insert([{
-        list_id,
-        word: word.trim(),
-        explanation: explanation?.trim() || ''
-      }])
-      .select()
-      .single();
+      .insert(inserts);
 
-    if (res.error) {
-      console.error('Supabase error:', res.error);
-      return NextResponse.json({ error: 'Failed to create word' }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ error: error.message, details: error }, { status: 500 });
     }
 
-    return NextResponse.json(res.data, { status: 201 });
+    return NextResponse.json({ success: true, inserted: data }, { status: 201 });
   } catch (error) {
-    console.error('Error creating word:', error);
-    return NextResponse.json({ error: 'Failed to create word' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to add words' }, { status: 500 });
   }
 }
 
