@@ -45,7 +45,7 @@ export default function WordListsPage() {
   
   const router = useRouter();
 
-  const loadData = async (listId?: string) => {
+  const loadData = async (listId?: string | null) => {
     try {
       setIsLoading(true);
       const listsResponse = await fetch('/api/word-lists?userId=user_1');
@@ -53,14 +53,18 @@ export default function WordListsPage() {
         const listsData = await listsResponse.json();
         setWordLists(listsData.wordLists || []);
       }
-      let wordsResponse = { ok: false, json: async () => ({ words: [] }) };
+      
+      // Alleen woorden ophalen als er een lijst geselecteerd is
       if (listId) {
-        wordsResponse = await fetch(`/api/word-lists/words?listId=${listId}`);
-      }
-      if (wordsResponse.ok) {
-        const wordsData = await wordsResponse.json();
-        setWords(wordsData.words || []);
+        const wordsResponse = await fetch(`/api/word-lists/words?listId=${listId}`);
+        if (wordsResponse.ok) {
+          const wordsData = await wordsResponse.json();
+          setWords(wordsData.words || []);
+        } else {
+          setWords([]);
+        }
       } else {
+        // Geen lijst geselecteerd, dus geen woorden
         setWords([]);
       }
     } catch (error) {
@@ -96,7 +100,7 @@ export default function WordListsPage() {
       });
 
       if (response.ok) {
-        await loadData();
+        await loadData(selectedList);
         setNewWord({ word: '', explanation: '' });
         setShowAddWordModal(false);
       }
@@ -120,7 +124,7 @@ export default function WordListsPage() {
       });
 
       if (response.ok) {
-        await loadData();
+        await loadData(selectedList);
         setEditingWord(null);
         setShowEditWordModal(false);
       }
@@ -140,7 +144,7 @@ export default function WordListsPage() {
       });
 
       if (response.ok) {
-        await loadData();
+        await loadData(selectedList);
       }
     } catch (error) {
       console.error('Error deleting word:', error);
@@ -164,7 +168,7 @@ export default function WordListsPage() {
       });
 
       if (response.ok) {
-        await loadData();
+        await loadData(null);
         setNewList({ name: '', description: '', difficulty: 'Gemiddeld' });
         setShowAddListModal(false);
       }
@@ -189,7 +193,7 @@ export default function WordListsPage() {
       });
 
       if (response.ok) {
-        await loadData();
+        await loadData(null);
         setEditingList(null);
         setShowEditListModal(false);
       }
@@ -215,7 +219,7 @@ export default function WordListsPage() {
         if (selectedList === listId) {
           setSelectedList(null);
         }
-        await loadData();
+        await loadData(null);
       }
     } catch (error) {
       console.error('Error deleting list:', error);
